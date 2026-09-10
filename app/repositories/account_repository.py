@@ -2,7 +2,7 @@ from app.schemas.account import (
     AccountCreate,
     AccountStatus,
 )
-
+from decimal import Decimal
 
 class AccountRepository:
     def __init__(self) -> None:
@@ -36,9 +36,23 @@ class AccountRepository:
             "customer_name": data.customer_name,
             "currency": data.currency,
             "status": AccountStatus.ACTIVE,
-            "balance": 0.0,
+            "balance": Decimal("0.0"),
         }
 
         self._accounts.append(account)
+
+        return account
+
+    async def update_balance(
+        self,
+        account_id: int,
+        new_balance: Decimal,
+    ) -> dict | None:
+        account = await self.find_by_id(account_id)
+
+        if account is None:
+            return None
+
+        account["balance"] = new_balance
 
         return account

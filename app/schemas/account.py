@@ -1,7 +1,7 @@
 from enum import Enum
 
 from pydantic import BaseModel, Field
-
+from decimal import Decimal
 
 class Currency(str, Enum):
     PEN = "PEN"
@@ -28,3 +28,9 @@ class AccountResponse(BaseModel):
     currency: Currency
     status: AccountStatus
     balance: float
+
+class DepositRequest(BaseModel):
+    amount: Decimal = Field(
+        gt=0,
+        description="Amount to deposit",
+    )

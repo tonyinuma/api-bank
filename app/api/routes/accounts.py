@@ -4,6 +4,7 @@ from app.dependencies.accounts import get_account_service
 from app.schemas.account import (
     AccountCreate,
     AccountResponse,
+    DepositRequest,
 )
 from app.services.account_service import AccountService
 
@@ -51,3 +52,20 @@ async def create_account(
     ),
 ):
     return await service.create_account(data)
+
+
+@router.post(
+    "/{account_id}/deposit",
+    response_model=AccountResponse,
+)
+async def deposit(
+    account_id: int,
+    data: DepositRequest,
+    service: AccountService = Depends(
+        get_account_service
+    ),
+):
+    return await service.deposit(
+        account_id=account_id,
+        amount=data.amount,
+    )
